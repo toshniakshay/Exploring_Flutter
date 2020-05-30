@@ -1,0 +1,5 @@
+enum PersonalInfo {
+  GOAL_FOR_ACTIVATION,
+  MONTHLY_INCOME,
+  MONTHLY_EXPENSES
+}
