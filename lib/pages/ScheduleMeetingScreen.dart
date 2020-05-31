@@ -1,28 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:userregistration/application/AppConstants.dart';
 import 'package:userregistration/application/colors.dart';
+import 'package:userregistration/model/RegistrationInfo.dart';
 import 'package:userregistration/utils/Helper.dart';
 import 'package:userregistration/widgets/BottomSheet.dart';
 import 'package:userregistration/widgets/CustomBox.dart';
 import 'package:userregistration/widgets/StepperEx.dart';
 
 class ScheduleMeetingScreen extends StatefulWidget {
+  RegistrationInfo userInfo;
+
+  ScheduleMeetingScreen({@required this.userInfo}) : assert(userInfo != null);
+
   @override
-  _ScheduleMeetingScreenState createState() => _ScheduleMeetingScreenState();
+  _ScheduleMeetingScreenState createState() =>
+      _ScheduleMeetingScreenState(userInfo);
 }
 
 class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
+  RegistrationInfo userInfo;
   String selectedDate = ScheduleMeetingCosntants.ChooseDate;
   String selectedTime = ScheduleMeetingCosntants.ChooseTime;
+
+  _ScheduleMeetingScreenState(this.userInfo);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(child: AppBar(
-        backgroundColor: Helper.getColorFromHex(AppColors.AppBgColor),
-        title: new Text(AppConstants.CreateAccount),
-        elevation: 0.0,
-      ), preferredSize: Size.fromHeight(40.0)),
+      appBar: PreferredSize(
+          child: AppBar(
+            backgroundColor: Helper.getColorFromHex(AppColors.AppBgColor),
+            title: new Text(AppConstants.CreateAccount),
+            elevation: 0.0,
+          ),
+          preferredSize: Size.fromHeight(40.0)),
       backgroundColor: Helper.getColorFromHex(AppColors.AppBgColor),
       resizeToAvoidBottomPadding: false,
       body: Column(
@@ -32,7 +43,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[StepperEx(height:100.0,currentState: 4)],
+              children: <Widget>[StepperEx(height: 100.0, currentState: 4)],
             ),
           ),
           Expanded(
@@ -107,20 +118,31 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
           BottomSheetEx(
               btnTextColor: Colors.blue,
               buttonColor: Colors.white,
-              nextButtonAction: () => {onNextButtonClick(context)})
+              nextButtonAction: () => onNextButtonClick(context))
         ],
       ),
     );
   }
 
   onNextButtonClick(BuildContext context) {
-    if (selectedDate == ScheduleMeetingCosntants.ChooseDate) {
-      Helper.showErrorDialog(context, ScheduleMeetingCosntants.DateError);
-    } else if (selectedTime == ScheduleMeetingCosntants.ChooseTime) {
-      Helper.showErrorDialog(context, ScheduleMeetingCosntants.TimeError);
-    } else {
-      Navigator.pushNamedAndRemoveUntil(context, AppConstants.DefaultRoute, (r) => false);
-    }
+    setState(() {
+      if (selectedDate == ScheduleMeetingCosntants.ChooseDate) {
+        Helper.showErrorDialog(context, ScheduleMeetingCosntants.DateError);
+        return;
+      }
+
+      if (selectedTime == ScheduleMeetingCosntants.ChooseTime) {
+        Helper.showErrorDialog(context, ScheduleMeetingCosntants.TimeError);
+        return;
+      }
+
+      userInfo.meetingDate = selectedDate;
+      userInfo.meetingTime = selectedTime;
+
+      Navigator.of(context)
+          .pushNamed(AppConstants.ProfilePageRoute, arguments: userInfo);
+      //Navigator.pushNamedAndRemoveUntil(context, AppConstants.DefaultRoute, (r) => false);
+    });
   }
 
   Future<Null> _showDatePicket(BuildContext context) async {

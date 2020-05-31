@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:userregistration/application/AppConstants.dart';
 import 'package:userregistration/application/colors.dart';
 import 'package:userregistration/model/PasswordConstraint.dart';
+import 'package:userregistration/model/RegistrationInfo.dart';
 import 'package:userregistration/utils/Helper.dart';
 import 'package:userregistration/utils/Validator.dart';
 import 'package:userregistration/widgets/BottomSheet.dart';
@@ -11,8 +12,13 @@ import 'package:userregistration/widgets/PasswordValidationWidget/PasswordValida
 import 'package:userregistration/widgets/StepperEx.dart';
 
 class InputPasswordScreen extends StatefulWidget {
+
+  RegistrationInfo userInfo;
+
+  InputPasswordScreen({@required this.userInfo}) : assert(userInfo != null);
+
   @override
-  _InputPasswordScreenState createState() => _InputPasswordScreenState();
+  _InputPasswordScreenState createState() => _InputPasswordScreenState(userInfo);
 }
 
 class _InputPasswordScreenState extends State<InputPasswordScreen> {
@@ -25,6 +31,11 @@ class _InputPasswordScreenState extends State<InputPasswordScreen> {
   Widget uppercaseWidget;
   Widget numberWidget;
   Widget lengthWidget;
+
+
+  RegistrationInfo userInfo;
+
+  _InputPasswordScreenState(this.userInfo);
 
   @override
   void initState() {
@@ -152,7 +163,8 @@ class _InputPasswordScreenState extends State<InputPasswordScreen> {
   onNextButtonClick(BuildContext context) {
     String result = Validator.validatePassword(passwordTextController.text);
     if (result == null) {
-      Navigator.of(context).pushNamed(AppConstants.PersonalInfoRoute);
+      userInfo.password = passwordTextController.text.toString();
+      Navigator.of(context).pushNamed(AppConstants.PersonalInfoRoute, arguments: userInfo);
     } else {
       Helper.showErrorDialog(context, result);
     }

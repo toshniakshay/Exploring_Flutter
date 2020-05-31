@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:userregistration/application/AppConstants.dart';
 import 'package:userregistration/application/colors.dart';
+import 'package:userregistration/model/RegistrationInfo.dart';
 import 'package:userregistration/utils/Helper.dart';
 import 'package:userregistration/utils/Validator.dart';
-import 'package:userregistration/widgets/BaseWidget.dart';
 import 'package:userregistration/widgets/BottomSheet.dart';
 import 'package:userregistration/widgets/CustomClipper.dart';
 import 'package:userregistration/widgets/StepperEx.dart';
@@ -21,10 +21,13 @@ class _InputEmailScreenState extends State<InputEmailScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final emailTextController = TextEditingController();
   bool _autoValidate = false;
+  var userInfo = RegistrationInfo();
 
   @override
   void initState() {
     super.initState();
+
+    //todo :: if email field is already present in the userInfo obj then we need to prepopulate the email
   }
 
   @override
@@ -149,7 +152,8 @@ class _InputEmailScreenState extends State<InputEmailScreen> {
   onNextButtonClick(BuildContext context) {
     final form = _formKey.currentState;
     if (form.validate()) {
-      Navigator.of(context).pushNamed(AppConstants.PasswordRoute);
+      userInfo.email = emailTextController.text.toString();
+      Navigator.of(context).pushNamed(AppConstants.PasswordRoute, arguments: userInfo);
     } else {
       Helper.showErrorDialog(
           context, Validator.validateEmail(emailTextController.text));

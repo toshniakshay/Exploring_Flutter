@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:userregistration/application/AppConstants.dart';
 import 'package:userregistration/application/colors.dart';
 import 'package:userregistration/enums/PersonalInfo.dart';
+import 'package:userregistration/model/RegistrationInfo.dart';
 import 'package:userregistration/utils/Helper.dart';
 import 'package:userregistration/utils/Validator.dart';
 import 'package:userregistration/widgets/BottomSheet.dart';
@@ -9,9 +10,15 @@ import 'package:userregistration/widgets/CustomBox.dart';
 import 'package:userregistration/widgets/CustomListWidget.dart';
 import 'package:userregistration/widgets/StepperEx.dart';
 
+
 class PersonalInformation extends StatefulWidget {
+
+  RegistrationInfo userInfo;
+
+  PersonalInformation({@required this.userInfo}): assert(userInfo != null);
+
   @override
-  _PersonalInformationState createState() => _PersonalInformationState();
+  _PersonalInformationState createState() => _PersonalInformationState(userInfo);
 }
 
 class _PersonalInformationState extends State<PersonalInformation> {
@@ -19,6 +26,16 @@ class _PersonalInformationState extends State<PersonalInformation> {
   String _monthlyIncome = PersonalInfoConstants.ChooseOption;
   String _monthlyExpense = PersonalInfoConstants.ChooseOption;
 
+  RegistrationInfo userInfo;
+
+  _PersonalInformationState(this.userInfo);
+
+  @override
+  void initState() {
+    super.initState();
+
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,7 +144,12 @@ class _PersonalInformationState extends State<PersonalInformation> {
 
     // There are some issues with validation
     if (result == null) {
-      Navigator.of(context).pushNamed(AppConstants.ScheduleMeetingRoute);
+      userInfo.goal = _goalForActivation;
+      userInfo.monthlyIncome = _monthlyIncome;
+      userInfo.monthlyExpense = _monthlyExpense;
+
+      print("Schedule meeting screen launced");
+      Navigator.of(context).pushNamed(AppConstants.ScheduleMeetingRoute, arguments: userInfo);
     } else {
       Helper.showErrorDialog(
           context,

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:userregistration/anim/SlideAnimation.dart';
 import 'package:userregistration/application/AppConstants.dart';
+import 'package:userregistration/model/RegistrationInfo.dart';
 import 'package:userregistration/pages//Welcome.dart';
 import 'package:userregistration/pages/InputEmailScreen.dart';
 import 'package:userregistration/pages/InputPasswordScreen.dart';
 import 'package:userregistration/pages/PersonalInformation.dart';
+import 'package:userregistration/pages/ProfileScreen.dart';
 import 'package:userregistration/pages/ScheduleMeetingScreen.dart';
 
 class RouteGenerator {
@@ -13,34 +15,38 @@ class RouteGenerator {
 
     switch (settings.name) {
       case AppConstants.DefaultRoute:
-        return SlideRightRoute(
-            page: WelcomeWidget()
-        );
+        return SlideRightRoute(page: WelcomeWidget());
         break;
 
       case AppConstants.EmailRoute:
-        if (args is String) {
+          return SlideRightRoute(page: InputEmailScreen());
+
+      case AppConstants.PasswordRoute:
+        if (args is RegistrationInfo) {
           return SlideRightRoute(
-              page: InputEmailScreen()
-          );
+              page: InputPasswordScreen(
+            userInfo: args,
+          ));
         }
         return _errorRoute();
 
-      case AppConstants.PasswordRoute:
-        return SlideRightRoute(
-            page: InputPasswordScreen()
-        );
-
       case AppConstants.PersonalInfoRoute:
-        return SlideRightRoute(
-            page: PersonalInformation()
-        );
+        if (args is RegistrationInfo) {
+          return SlideRightRoute(page: PersonalInformation(userInfo: args,));
+        }
+        return _errorRoute();
 
       case AppConstants.ScheduleMeetingRoute:
-        return SlideRightRoute(
-            page: ScheduleMeetingScreen()
-        );
-        break;
+        if(args is RegistrationInfo) {
+          return SlideRightRoute(page: ScheduleMeetingScreen(userInfo: args,));
+        }
+        return _errorRoute();
+
+      case AppConstants.ProfilePageRoute:
+        if(args is RegistrationInfo) {
+          return SlideRightRoute(page: ProfilePage(userInfo: args,));
+        }
+        return _errorRoute();
 
       default:
         return _errorRoute();

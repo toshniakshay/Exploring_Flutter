@@ -26,8 +26,7 @@ class WelcomeWidget extends StatelessWidget {
                     splashColor: Colors.white, // inkwell color
                     child: SizedBox(width: 56, height: 56, child: Icon(Icons.play_arrow)),
                     onTap: () {
-                      Navigator.of(context).pushNamed(
-                          AppConstants.EmailRoute, arguments: "Hello There from First Page!!");
+                      Navigator.of(context).pushNamed(AppConstants.EmailRoute);
                     },
                   ),
                 ),

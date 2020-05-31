@@ -4,6 +4,7 @@ class AppConstants {
   static const String PasswordRoute = "/getPassword";
   static const String PersonalInfoRoute = "/getPersonalInformation";
   static const String ScheduleMeetingRoute = "/scheduleMeeting";
+  static const String ProfilePageRoute = "/ProfilePage";
 
   static const String CreateAccount = "Create Account";
 }
